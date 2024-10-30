@@ -1,6 +1,11 @@
 
 using Microsoft.EntityFrameworkCore;
+using Ticket.Domain.Repository;
 using Ticket.Infrastructure.Data;
+using Ticket.Infrastructure.Implementation;
+using Ticket.services.Implementation;
+using Ticket.services.Interfaces;
+using Ticket.services.Mapper;
 
 namespace Ticket.Presentation
 {
@@ -23,6 +28,10 @@ namespace Ticket.Presentation
             options.UseMySql(
               builder.Configuration.GetConnectionString("Conf"),
                   new MySqlServerVersion(new Version(8, 0, 33))));
+            builder.Services.AddAutoMapper(typeof(TicketProfile));
+            builder.Services.AddAutoMapper(typeof(Program));
+            builder.Services.AddScoped<ITicketServices, ticketServices>();
+            builder.Services.AddScoped<ITicketRepository, TicketRepositry>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
